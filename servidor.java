@@ -5,13 +5,8 @@
  */
 package practica1tet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.net.*;
 
 /**
  *
@@ -26,10 +21,12 @@ public class servidor {
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         ServerSocket servidor = null;                   // Socket del servidor
+        Socket cliente = null;                          // Socket del cliente
+        
         servidor = new ServerSocket(5000);
-        System.out.println("Iniciando servidor...");
+        System.out.println("Servidor iniciado");
+        
         while(true){
-            Socket cliente = new Socket();              // Socket del cliente
             cliente = servidor.accept();                // Espera la conexión con algún cliente
             hiloServidor hilo = new hiloServidor(cliente);
             hilo.start();

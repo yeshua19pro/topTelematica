@@ -7,32 +7,49 @@ package practica1tet;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author jcmju
  */
 public class cliente {
-    public static void main(String[] args) throws IOException{
-        String host = "localhost";
+
+    public static void main(String[] args) {
+        String host = "localhost";                                                  // sambiar por endpoint de la instancia EC2
         int puerto = 5000;
-        Socket cliente = new Socket(host,puerto);
-        PrintWriter salida = new PrintWriter(cliente.getOutputStream(),true);
-        BufferedReader entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        String cadena,eco = "";
-        System.out.println("Escriba algo");
-        cadena = in.readLine();
-        while(!cadena.equals("CLOSE")){
-            salida.print(cadena);
-            eco = entrada.readLine();
+        DataInputStream entrada;
+        DataOutputStream salida;
+
+        Socket cliente;
+        try {
+            cliente = new Socket(host, puerto);                                     // socket del cliente
+            entrada = new DataInputStream(cliente.getInputStream());
+            salida = new DataOutputStream(cliente.getOutputStream());
+
             System.out.println("Escriba algo");
-            cadena = in.readLine();
+            InputStreamReader isr = new InputStreamReader(System.in);
+            BufferedReader br = new BufferedReader(isr);
+            String mensaje = br.readLine();
+
+            salida.writeUTF(mensaje);                                 // escribe un mensaje al servidor
+
+            while (!mensaje.toString().toUpperCase().equals("CLOSE")) {
+                String respuesta = entrada.readUTF();                               // lee la respuesta del servidor
+                System.out.println("Servidor dice: " + respuesta);
+
+                System.out.println("Escriba algo");
+                mensaje = br.readLine();
+                salida.writeUTF(mensaje);                             // escribe un mensaje al servidor
+            }
+
+            System.out.println("Fin del envío");
+            cliente.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(cliente.class.getName()).log(Level.SEVERE,
+                    null, ex);
         }
-        salida.close();
-        entrada.close();
-        System.out.println("Fin del envío");
-        in.close();
-        cliente.close();
     }
 }
