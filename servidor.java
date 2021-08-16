@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package practica1tet;
 
 import java.io.*;
@@ -14,24 +9,20 @@ import java.net.*;
  */
 public class servidor {
 
-    /**
-     * @param args the command line arguments
-     * @throws java.io.IOException
-     */
     public static void main(String[] args) throws IOException {
-        // TODO code application logic here
-        ServerSocket servidor = null;                   // Socket del servidor
-        Socket cliente = null;                          // Socket del cliente
-        
-        servidor = new ServerSocket(5000);
-        System.out.println("Servidor iniciado");
-        
-        while(true){
-            cliente = servidor.accept();                // Espera la conexión con algún cliente
+        ServerSocket servidor;
+        //Puerto que el ServerSocket va a escuchar
+        int puerto = 5000;
+        // Socket del cliente
+        Socket cliente;
+        servidor = new ServerSocket(puerto);
+        while (true) {
+            System.out.println("Espernado por request del cliente");
+            cliente = servidor.accept();
+            // Hilo para atender la conexión de varios clientes simultáneos
             hiloServidor hilo = new hiloServidor(cliente);
             hilo.start();
-            System.out.println("Hilo iniciado");
         }
     }
-    
+
 }

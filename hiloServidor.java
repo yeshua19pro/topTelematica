@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package practica1tet;
 
 import java.io.*;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  *
@@ -18,7 +12,8 @@ public class hiloServidor extends Thread {
 
     DataInputStream entrada;
     DataOutputStream salida;
-    Socket socket = null;                                                           // Socket del cliente
+    // Socket del cliente
+    Socket socket = null;
 
     public hiloServidor(Socket s) {
         socket = s;
@@ -26,35 +21,29 @@ public class hiloServidor extends Thread {
             entrada = new DataInputStream(socket.getInputStream());
             salida = new DataOutputStream(socket.getOutputStream());
         } catch (IOException ex) {
-            Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE,
-                    null, ex);
+            Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void run() {
-        String cadena = "";
-        
-        while (!cadena.toUpperCase().trim().equals("CLOSE")) {
-            try {
-                if (cadena != null) {
-                    cadena = entrada.readUTF();                                     // lee el mensaje del cliente   
-                    System.out.println(socket.toString() + " dice: " + cadena);     // muestra el mensaje del cliente
-                    salida.writeUTF("recibido - "+cadena);                           // responde al cliente
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE,
-                        null, ex);
-            }
-        }
-        
-        System.out.println("Fin de la conexión con " + socket.toString());
-        
         try {
-            socket.close();
+            String cadena;
+            while (true) {
+                cadena = entrada.readUTF();
+                // Se mantiene escuchando hasta que lea el comando "close"
+                System.out.println("Mensaje recibido: " + cadena + " (" + socket.getLocalAddress().toString() + ")");
+                // Responde al cliente
+                salida.writeUTF("Servidor: recibido, cliente " + socket.getLocalAddress().toString());
+                if (cadena.equalsIgnoreCase("close")) {
+                    // Cierre de conexión con el cliente
+                    System.out.println("Fin de la conexión con " + socket.getLocalAddress().toString());
+                    socket.close();
+                    break;
+                }
+            }
         } catch (IOException ex) {
-            Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE, 
-                    null, ex);
+            Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
