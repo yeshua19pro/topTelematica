@@ -20,12 +20,14 @@ public class servidor {
 
         public handlerClient(Socket s) {
             socket = s;
+
             try {
                 entrada = new DataInputStream(socket.getInputStream());
                 salida = new DataOutputStream(socket.getOutputStream());
             } catch (IOException ex) {
-                Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(servidor.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
 
         @Override
@@ -46,7 +48,7 @@ public class servidor {
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(hiloServidor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(servidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
