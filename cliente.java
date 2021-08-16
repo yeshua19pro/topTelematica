@@ -1,4 +1,4 @@
-package practica1tet;
+//package practica1tet;
 
 import java.io.*;
 import java.net.*;
@@ -12,7 +12,7 @@ public class cliente {
 
     public static void main(String[] args) {
 
-        String host = "localhost";
+        String host = "ec2-3-236-190-69.compute-1.amazonaws.com";
         int puerto = 5000;
         DataInputStream entrada;
         DataOutputStream salida;
