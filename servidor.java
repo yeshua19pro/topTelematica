@@ -1,4 +1,4 @@
-package practica1tet;
+
 
 import java.io.*;
 import java.net.*;
@@ -37,12 +37,12 @@ public class servidor {
                 while (true) {
                     cadena = entrada.readUTF();
                     // Se mantiene escuchando hasta que lea el comando "close"
-                    System.out.println("Mensaje recibido: " + cadena + " (" + socket.getLocalAddress().toString() + ")");
+                    System.out.println("Mensaje recibido: " + cadena + " (" + socket.getInetAddress().toString() + ")");
                     // Responde al cliente
-                    salida.writeUTF("Servidor: recibido, cliente " + socket.getLocalAddress().toString());
+                    salida.writeUTF("Servidor: recibido, cliente " + socket.getInetAddress().toString());
                     if (cadena.equalsIgnoreCase("close")) {
                         // Cierre de conexión con el cliente
-                        System.out.println("Fin de la conexión con " + socket.getLocalAddress().toString());
+                        System.out.println("Fin de la conexión con " + socket.getInetAddress().toString());
                         socket.close();
                         break;
                     }
